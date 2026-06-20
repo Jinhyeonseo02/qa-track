@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Bug, BookOpen, Award, Map, MessageSquare, Loader2, Gamepad2, ChevronRight, Megaphone, Server, ArrowLeft, Sparkles } from "lucide-react";
+import { Send, Bug, BookOpen, Award, Map, Loader2, Gamepad2, ChevronRight, Megaphone, Server, ArrowLeft, Sparkles } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
 // 게임 QA 데이터
@@ -144,8 +144,9 @@ const CAREERS = {
     titleHighlight: "QA 엔지니어",
     titleLine2: "가 되는 길",
     desc: "버그를 '발견'하는 사람을 넘어 게임의 품질을 '설계'하는 직무. 아래 로드맵과 추천 과목·자격증을 따라가고, 궁금한 건 오른쪽 챗봇에게 물어보세요.",
-    chatTitle: "QA 멘토 봇",
-    chatSub: "게임 QA 무엇이든 물어보세요",
+    mentorName: "지우 멘토",
+    mentorTagline: "13년 차, MMORPG·모바일 출시 QA 리드",
+    avatar: "https://api.dicebear.com/9.x/adventurer/svg?seed=Jiwoo&backgroundColor=b388ff",
     placeholder: "게임 QA에 대해 물어보세요…",
     initMsg: "안녕하세요! 게임 QA 진로 멘토예요. 게임 QA가 무슨 일을 하는지, 어떤 과목·자격증을 챙겨야 하는지, 포트폴리오는 어떻게 만드는지 무엇이든 물어보세요!",
     roadmap: QA_ROADMAP, courses: QA_COURSES, certs: QA_CERTS,
@@ -162,8 +163,9 @@ const CAREERS = {
     titleHighlight: "마케터",
     titleLine2: "가 되는 길",
     desc: "숫자로 증명하는 스토리텔러. 아래 로드맵과 추천 과목·자격증을 따라가고, 궁금한 건 오른쪽 챗봇에게 물어보세요.",
-    chatTitle: "마케터 멘토 봇",
-    chatSub: "콘텐츠 마케팅 무엇이든 물어보세요",
+    mentorName: "서연 멘토",
+    mentorTagline: "10년 차, 0→수십만 팔로워 키운 마케팅 팀 리드",
+    avatar: "https://api.dicebear.com/9.x/adventurer/svg?seed=Seoyeon2&backgroundColor=ffb3d1",
     placeholder: "콘텐츠 마케팅에 대해 물어보세요…",
     initMsg: "안녕하세요! 콘텐츠 마케터 진로 멘토예요. 어떤 콘텐츠를 만들어야 하는지, 포트폴리오 구성법, 필요한 자격증까지 무엇이든 물어보세요!",
     roadmap: MKT_ROADMAP, courses: MKT_COURSES, certs: MKT_CERTS,
@@ -180,8 +182,9 @@ const CAREERS = {
     titleHighlight: "엔지니어",
     titleLine2: "가 되는 길",
     desc: "서버·클라우드·네트워크로 서비스를 떠받치는 직무. 아래 로드맵과 추천 과목·자격증을 따라가고, 궁금한 건 오른쪽 챗봇에게 물어보세요.",
-    chatTitle: "인프라 멘토 봇",
-    chatSub: "인프라·DevOps 무엇이든 물어보세요",
+    mentorName: "준호 멘토",
+    mentorTagline: "12년 차, 수백만 트래픽 운영·온콜 베테랑",
+    avatar: "https://api.dicebear.com/9.x/adventurer/svg?seed=Junho&backgroundColor=80deea",
     placeholder: "인프라 엔지니어에 대해 물어보세요…",
     initMsg: "안녕하세요! 인프라 엔지니어 진로 멘토예요. 클라우드 시작법, 자격증 로드맵, 포트폴리오까지 무엇이든 물어보세요!",
     roadmap: INFRA_ROADMAP, courses: INFRA_COURSES, certs: INFRA_CERTS,
@@ -214,7 +217,7 @@ function HomePage({ onSelect }) {
           </div>
           <div>
             <div style={S.brandTitle}>FIND YOUR QUALITY</div>
-            <div style={S.brandSub}>컴공 전공자를 위한 직무 가이드</div>
+            <div style={S.brandSub}>IT 분야 취업을 희망하는 당신을 위한 직무 가이드</div>
           </div>
         </div>
       </header>
@@ -400,37 +403,39 @@ function CareerPage({ career, onBack }) {
 
         <aside style={S.right} className="qa-right">
           <div style={S.chatHead}>
-            <div style={{ ...S.chatHeadIcon, background: acc + "28" }}>
-              <MessageSquare size={16} color={accL} />
-            </div>
+            <img src={career.avatar} alt={career.mentorName} style={{ ...S.chatAvatar, border: `2px solid ${acc}66`, background: acc + "22" }} />
             <div>
-              <div style={S.chatHeadTitle}>{career.chatTitle}</div>
-              <div style={S.chatHeadSub}>{career.chatSub}</div>
+              <div style={S.chatHeadTitle}>{career.mentorName}</div>
+              <div style={S.chatHeadSub}>{career.mentorTagline}</div>
             </div>
           </div>
 
           <div ref={scrollRef} style={S.chatScroll}>
             {messages.map((m, i) => (
-              <div key={i} style={{ ...S.msgRow, justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+              <div key={i} style={{ ...S.msgRow, justifyContent: m.role === "user" ? "flex-end" : "flex-start", alignItems: "flex-end", gap: 8 }}>
+                {m.role === "assistant" && (
+                  <img src={career.avatar} alt={career.mentorName} style={{ ...S.msgAvatar, border: `1.5px solid ${acc}55` }} />
+                )}
                 <div style={m.role === "user" ? { ...S.msgUser, background: `linear-gradient(135deg,${acc},${accL})` } : S.msgBot}>
                   {m.content.split("\n").map((line, j) => <p key={j} style={S.msgLine}>{line}</p>)}
                 </div>
               </div>
             ))}
             {loading && (
-              <div style={{ ...S.msgRow, justifyContent: "flex-start" }}>
+              <div style={{ ...S.msgRow, justifyContent: "flex-start", alignItems: "flex-end", gap: 8 }}>
+                <img src={career.avatar} alt={career.mentorName} style={{ ...S.msgAvatar, border: `1.5px solid ${acc}55` }} />
                 <div style={S.msgBot}><Loader2 size={16} className="spin" color={accL} /></div>
               </div>
             )}
-          </div>
 
-          {messages.length <= 2 && (
-            <div style={S.suggestWrap}>
-              {career.suggested.map((q) => (
-                <button key={q} style={{ ...S.suggestBtn, color: accL, borderColor: acc + "55", background: acc + "18" }} onClick={() => send(q)} disabled={loading}>{q}</button>
-              ))}
-            </div>
-          )}
+            {messages.length <= 2 && (
+              <div style={S.suggestWrap}>
+                {career.suggested.map((q) => (
+                  <button key={q} style={{ ...S.suggestBtn, color: accL, borderColor: acc + "55", background: acc + "18" }} onClick={() => send(q)} disabled={loading}>{q}</button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div style={S.inputBar}>
             <input
@@ -546,6 +551,8 @@ const S = {
   right: { width: 400, display: "flex", flexDirection: "column", borderLeft: "1px solid rgba(255,255,255,.08)", background: "#0E0D17", minHeight: 0 },
   chatHead: { display: "flex", alignItems: "center", gap: 11, padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,.07)" },
   chatHeadIcon: { width: 34, height: 34, borderRadius: 9, display: "grid", placeItems: "center" },
+  chatAvatar: { width: 40, height: 40, borderRadius: "50%", objectFit: "cover", flexShrink: 0 },
+  msgAvatar: { width: 26, height: 26, borderRadius: "50%", objectFit: "cover", flexShrink: 0 },
   chatHeadTitle: { fontWeight: 700, fontSize: 14.5 },
   chatHeadSub: { fontSize: 11.5, color: "#7C798F" },
   chatScroll: { flex: 1, overflowY: "auto", padding: "18px 18px", display: "flex", flexDirection: "column", gap: 12, minHeight: 0 },
@@ -553,7 +560,7 @@ const S = {
   msgBot: { maxWidth: "85%", background: "#1C1A2A", border: "1px solid rgba(255,255,255,.06)", borderRadius: "4px 14px 14px 14px", padding: "11px 14px", fontSize: 13.6, lineHeight: 1.6, color: "#DBD8EC" },
   msgUser: { maxWidth: "85%", borderRadius: "14px 4px 14px 14px", padding: "11px 14px", fontSize: 13.6, lineHeight: 1.6, color: "#fff" },
   msgLine: { margin: "0 0 4px" },
-  suggestWrap: { display: "flex", flexWrap: "wrap", gap: 7, padding: "0 18px 12px" },
+  suggestWrap: { display: "flex", flexWrap: "wrap", gap: 7, paddingTop: 4 },
   suggestBtn: { fontSize: 12, border: "1px solid", borderRadius: 999, padding: "6px 12px", cursor: "pointer", fontFamily: sans, transition: "all .2s", background: "transparent" },
   inputBar: { display: "flex", gap: 8, padding: "14px 16px", borderTop: "1px solid rgba(255,255,255,.07)" },
   input: { flex: 1, background: "#1C1A2A", border: "1px solid rgba(255,255,255,.1)", borderRadius: 11, padding: "11px 14px", color: "#E8E6F0", fontSize: 13.6, fontFamily: sans, outline: "none" },
